@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "pipedrive-webhook-listener"
+version = "0.1.0"
+description = "A webhook listener for PipeDrive"
+authors = ["Pete Crocker <pete@petecrocker.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Flask = "^3.0.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
