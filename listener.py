@@ -10,8 +10,9 @@ app = Flask(__name__)
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
-    payload = request.json
-    # Process the webhook payload
+    payload = request.get_json()
+    print("DEBUG PAYLOAD:")
+    print(payload)
     process_deal_update(payload)
     return jsonify(success=True), 200
 
@@ -20,7 +21,7 @@ def process_deal_update(payload):
     deal_id = payload["current"]["id"]
     custom_fields = payload["current"]["custom_fields"]
 
-    relevant_fields = ["metrics", "economic_buyer"]
+    relevant_fields = ["Metrics", "Economic Buyer", "Decision Criteria", "Decision Process", "Paper Process", "Implications of Pain", "Champion", "Competition"]
     updated_fields = [field for field in relevant_fields if field in custom_fields]
 
     if updated_fields:
@@ -44,10 +45,9 @@ def process_custom_fields(deal_id, custom_fields, updated_fields):
 def update_pipedrive_field(deal_id, total_sum):
     url = f"{PIPEDRIVE_API_URL}/deals/{deal_id}?api_token={PIPEDRIVE_API_TOKEN}"
 
-    # Assuming "total_sum_field" is the key for your custom field
     data = {
         "custom_fields": {
-            "total_sum_field": total_sum
+            "MEDDPICC Score": total_sum
         }
     }
 
@@ -59,4 +59,4 @@ def update_pipedrive_field(deal_id, total_sum):
 
 
 if __name__ == "__main__":
-    app.run(port=5000)
+    app.run(host="0.0.0.0", port=5000)
