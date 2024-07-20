@@ -5,6 +5,8 @@ PIPEDRIVE_API_TOKEN = os.environ["PIPEDRIVE_API_TOKEN"]
 PIPEDRIVE_API_URL = "https://api.pipedrive.com/v1"
 WEBHOOK_SUBSCRIPTION_URL = os.environ["WEBHOOK_SUBSCRIPTION_URL"]
 COMPANY = os.environ["COMPANY"]
+PIPEDRIVE_EVENT_ACTION = "change"
+PIPEDRIVE_EVENT_OBJECT = "deal"
 
 url = f"{PIPEDRIVE_API_URL}/webhooks"
 
@@ -19,8 +21,8 @@ params = {
 
 data = {
     "subscription_url": WEBHOOK_SUBSCRIPTION_URL,
-    "event_action": "change",
-    "event_object": "deal",
+    "event_action": PIPEDRIVE_EVENT_ACTION,
+    "event_object": PIPEDRIVE_EVENT_OBJECT,
     "version": "2.0",
 }
 

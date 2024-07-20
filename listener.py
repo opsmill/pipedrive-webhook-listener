@@ -1,22 +1,44 @@
 from flask import Flask, request, jsonify
 import requests
 import os
+from rich.console import Console
+from rich.json import JSON
+from rich.theme import Theme
+import json
 
 PIPEDRIVE_API_TOKEN = os.environ["PIPEDRIVE_API_TOKEN"]
 COMPANY = os.environ["COMPANY"]
 PIPEDRIVE_API_URL = f"https://{COMPANY}.pipedrive.com/api/v1"
 
-MEDDPICC_SCORE_KEY = "5ca44a9b86cc692ac0d5b1cc087a09b1ebb34e18"
+MEDDPICC_SCORE_KEY = os.environ["MEDDPICC_SCORE_KEY"]
 
-METRICS_KEY = "d5963a386e13949b2a609db6450422bf122be4ab"
-ECONOMIC_BUYER_KEY = "0892ab7022a18d2fc1939f571dbe2502f314d816"
-DECISION_CRITERIA_KEY = "52c5717b0df9a00d4b2db69ea3ecb0a5adf81cf3"
-DECISION_PROCESS_KEY = "89d9b1e8f9ee8d2837e7f305d9cdf7d73e8df682"
-PAPER_PROCESS_KEY = "bb58c865d7a5c63389e262bb4403c3ffc49503ec"
-IMPLICATIONS_OF_PAIN_KEY = "1db106e5b7613380d16098048cdd3788ba2cb983"
-CHAMPION_KEY = "cb017cc71cfdfe72a427e6f3eee37c26e6afb0ab"
-COMPETITION_KEY = "e7f64ff05103b77b3c3026095cf88d808b95c654"
+METRICS_KEY = os.environ["METRICS_KEY"]
+ECONOMIC_BUYER_KEY = os.environ["ECONOMIC_BUYER_KEY"]
+DECISION_CRITERIA_KEY = os.environ["DECISION_CRITERIA_KEY"]
+DECISION_PROCESS_KEY = os.environ["DECISION_PROCESS_KEY"]
+PAPER_PROCESS_KEY = os.environ["PAPER_PROCESS_KEY"]
+IMPLICATIONS_OF_PAIN_KEY = os.environ["IMPLICATIONS_OF_PAIN_KEY"]
+CHAMPION_KEY = os.environ["CHAMPION_KEY"]
+COMPETITION_KEY = os.environ["COMPETITION_KEY"]
 
+DEBUG = True
+
+custom_theme = Theme(
+    {
+        "json.brace": "bold yellow",
+        "json.bracket": "bold yellow",
+        "json.colon": "bold white",
+        "json.comma": "bold white",
+        "json.key": "bold cyan",
+        "json.value.string": "bold green",
+        "json.value.number": "bold magenta",
+        "json.value.boolean": "bold red",
+        "json.value.null": "bold dim",
+    }
+)
+
+# console = Console()
+console = Console(theme=custom_theme)
 
 app = Flask(__name__)
 
@@ -24,8 +46,10 @@ app = Flask(__name__)
 @app.route("/webhook", methods=["POST"])
 def webhook():
     payload = request.get_json()
-    # print("DEBUG CUSTOM FIELDS:")
-    # print(payload["data"]["custom_fields"])
+    if DEBUG:
+        console.print("[bold red]DEBUG CUSTOM FIELDS[/]")
+        json_string = json.dumps(payload["data"]["custom_fields"], indent=4)
+        console.print(JSON(json_string))
     process_deal_update(payload)
     return jsonify(success=True), 200
 
@@ -89,11 +113,21 @@ def update_pipedrive_field(deal_id, total_sum):
         MEDDPICC_SCORE_KEY: total_sum,
     }
 
+    if DEBUG:
+        console.print("[bold red]DEBUG DATA TO UPLOAD[/]")
+        console.print(f"[bold red]URL: {url}[/]")
+        console.print(f"[bold red]Params: {params}[/]")
+        console.print(f"[bold red]Data: {data}[/]")
+
     response = requests.put(url, headers=headers, params=params, json=data)
-    # if response.status_code == 200:
-    #     print(f"Successfully updated deal {deal_id} with total sum: {total_sum}")
-    # else:
-    #     print(f"Failed to update deal {deal_id}. Status code: {response}")
+    if response.status_code == 200:
+        console.print(
+            f"[bold green]Successfully updated deal {deal_id} with total sum: {total_sum}[/]"
+        )
+    else:
+        console.print(
+            f"[bold red]Failed to update deal {deal_id}. Status code: {response}[/]"
+        )
 
 
 if __name__ == "__main__":
