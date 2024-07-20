@@ -59,6 +59,9 @@ poetry install --no-root
 poetry run python3 listener.py
 ```
 
+> **Note**
+You can turn on `DEBUG` in the script variable to see custom field keys and other debugging information.
+
 ## Possible Improvements
 
 - This script looks up custom fields by their key value. It could be possible to lookup custom field by name and do away with the need to set their key values as environmental variables.

@@ -21,7 +21,7 @@ IMPLICATIONS_OF_PAIN_KEY = os.environ["IMPLICATIONS_OF_PAIN_KEY"]
 CHAMPION_KEY = os.environ["CHAMPION_KEY"]
 COMPETITION_KEY = os.environ["COMPETITION_KEY"]
 
-DEBUG = True
+DEBUG = False
 
 custom_theme = Theme(
     {
