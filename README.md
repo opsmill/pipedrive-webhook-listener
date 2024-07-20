@@ -1,6 +1,6 @@
 # Pipedrive Webhook Listener
 
-A webhook listener for Pipedrive - Allows for custom automations not possible in Pipedrive automations.
+A webhook listener for [Pipedrive](https://www.pipedrive.com/) - Allows for custom automations not possible in Pipedrive automations.
 
 ## Purpose
 

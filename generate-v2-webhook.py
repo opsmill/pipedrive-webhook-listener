@@ -10,14 +10,9 @@ PIPEDRIVE_EVENT_OBJECT = "deal"
 
 url = f"{PIPEDRIVE_API_URL}/webhooks"
 
-headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json"
-    }
+headers = {"Accept": "application/json", "Content-Type": "application/json"}
 
-params = {
-        "api_token": PIPEDRIVE_API_TOKEN
-    }
+params = {"api_token": PIPEDRIVE_API_TOKEN}
 
 data = {
     "subscription_url": WEBHOOK_SUBSCRIPTION_URL,
